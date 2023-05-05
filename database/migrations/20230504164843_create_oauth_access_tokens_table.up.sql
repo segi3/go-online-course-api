@@ -10,7 +10,6 @@ CREATE TABLE oauth_access_tokens (
     `deleted_at` TIMESTAMP NULL,
     PRIMARY KEY(`id`),
     UNIQUE KEY oauth_access_tokens_token_unique(`token`),
-
     CONSTRAINT FK_oauth_access_tokens_user_id FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE SET NULL,
     CONSTRAINT FK_oauth_access_tokens_oauth_client_id FOREIGN KEY (`oauth_client_id`) REFERENCES oauth_clients(`id`) ON DELETE SET NULL
 )
