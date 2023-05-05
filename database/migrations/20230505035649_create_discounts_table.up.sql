@@ -4,6 +4,7 @@ CREATE TABLE discounts (
     `quantity` INT NOT NULL,
     `remaining_quantity` INT NOT NULL,
     `type` VARCHAR(255) NOT NULL,
+    `value` INT NOT NULL,
     `start_date` TIMESTAMP NULL,
     `end_date` TIMESTAMP NULL,
     `created_by` INT NULL,
