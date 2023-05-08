@@ -14,6 +14,7 @@ import (
 type UserUseCase interface {
 	FindAll(offset int, limit int) []entity.User
 	FindById(id int) (*entity.User, error)
+	FindByEmail(email string) (*entity.User, error)
 	Create(userDto dto.UserRequestBody) (*entity.User, error)
 	Update(userDto dto.UserRequestBody) (*entity.User, error)
 	Delete(id int) error
@@ -21,6 +22,11 @@ type UserUseCase interface {
 
 type UserUseCaseImpl struct {
 	repository repository.UserRepository
+}
+
+// FindByEmail implements UserUseCase
+func (usecase *UserUseCaseImpl) FindByEmail(email string) (*entity.User, error) {
+	panic("unimplemented")
 }
 
 // Create implements UserUseCase
@@ -71,8 +77,8 @@ func (*UserUseCaseImpl) FindAll(offset int, limit int) []entity.User {
 }
 
 // FindById implements UserUseCase
-func (*UserUseCaseImpl) FindById(id int) (*entity.User, error) {
-	panic("unimplemented")
+func (usecase *UserUseCaseImpl) FindById(id int) (*entity.User, error) {
+	return usecase.repository.FindById(id)
 }
 
 // Update implements UserUseCase
