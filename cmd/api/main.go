@@ -12,6 +12,7 @@ import (
 	mail "online-course/pkg/mail/sendgrid"
 
 	oauth "online-course/internal/oauth/injector"
+	profile "online-course/internal/profile/injector"
 )
 
 func main() {
@@ -27,5 +28,7 @@ func main() {
 	registerHandler.NewRegisterHandler(registerUseCase).Route(&r.RouterGroup)
 
 	oauth.InitializeService(db).Route(&r.RouterGroup)
+	profile.InitializeService(db).Route(&r.RouterGroup)
+
 	r.Run()
 }
