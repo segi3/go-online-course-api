@@ -10,6 +10,8 @@ import (
 	userRepository "online-course/internal/user/repository"
 	useUseCase "online-course/internal/user/usecase"
 	mail "online-course/pkg/mail/sendgrid"
+
+	oauth "online-course/internal/oauth/injector"
 )
 
 func main() {
@@ -24,5 +26,6 @@ func main() {
 	registerUseCase := registerUseCase.NewRegisterUseCase(userUseCase, mail)
 	registerHandler.NewRegisterHandler(registerUseCase).Route(&r.RouterGroup)
 
+	oauth.InitializeService(db).Route(&r.RouterGroup)
 	r.Run()
 }
