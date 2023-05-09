@@ -19,3 +19,7 @@ go.work
 
 # env var
 .env
+
+# log file
+/tmp/build-errors.log
+*.log

@@ -20,3 +20,9 @@ install golang-migrate
 ```
 go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 ```
+
+google wire-gen
+```bash
+# example
+wire gen internal/oauth/injector/wire.go
+```
