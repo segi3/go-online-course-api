@@ -13,6 +13,7 @@ import (
 
 	admin "online-course/internal/admin/injector"
 	oauth "online-course/internal/oauth/injector"
+	productCategory "online-course/internal/product_category/injector"
 	profile "online-course/internal/profile/injector"
 )
 
@@ -31,6 +32,7 @@ func main() {
 	oauth.InitializeService(db).Route(&r.RouterGroup)
 	profile.InitializeService(db).Route(&r.RouterGroup)
 	admin.InitializeService(db).Route(&r.RouterGroup)
+	productCategory.InitializeService(db).Route(&r.RouterGroup)
 
 	r.Run()
 }
