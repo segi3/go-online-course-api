@@ -1,0 +1,3 @@
+> create oauth client for general web
+> create oauth client with name 'web-admin' for admin 
+> create 1 admin record manually
