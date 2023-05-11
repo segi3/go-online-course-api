@@ -5,6 +5,7 @@ CREATE TABLE products (
     `description` VARCHAR(255) NOT NULL,
     `image` VARCHAR(255) NOT NULL,
     `video` VARCHAR(255) NOT NULL,
+    `price` INT NOT NULL,
     `created_by` INT NULL,
     `updated_by` INT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
