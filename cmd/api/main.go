@@ -12,6 +12,7 @@ import (
 	mail "online-course/pkg/mail/sendgrid"
 
 	admin "online-course/internal/admin/injector"
+	cart "online-course/internal/cart/injector"
 	oauth "online-course/internal/oauth/injector"
 	product "online-course/internal/product/injector"
 	productCategory "online-course/internal/product_category/injector"
@@ -35,6 +36,7 @@ func main() {
 	admin.InitializeService(db).Route(&r.RouterGroup)
 	productCategory.InitializeService(db).Route(&r.RouterGroup)
 	product.InitiliazeService(db).Route(&r.RouterGroup)
+	cart.InitiliazeService(db).Route(&r.RouterGroup)
 
 	r.Run()
 }
