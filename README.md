@@ -23,6 +23,9 @@ go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 
 google wire-gen
 ```bash
+# install
+go get github.com/google/wire/cmd/wire@latest
+
 # example
 wire gen internal/oauth/injector/wire.go
 ```
