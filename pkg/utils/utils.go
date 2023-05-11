@@ -3,6 +3,7 @@ package utils
 import (
 	"math/rand"
 	oauthDto "online-course/internal/oauth/dto"
+	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -47,4 +48,10 @@ func Paginate(offset int, limit int) func(db *gorm.DB) *gorm.DB {
 		return db.Offset(offset).Limit(pageSize)
 
 	}
+}
+
+func GetFileName(fileName string) string {
+	file := filepath.Base(fileName)
+
+	return file[:len(file)-len(filepath.Ext(file))]
 }
