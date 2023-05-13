@@ -1,1 +1,0 @@
-drop table class_rooms

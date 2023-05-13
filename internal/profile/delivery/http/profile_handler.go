@@ -2,6 +2,7 @@ package profile
 
 import (
 	"net/http"
+
 	middleware "online-course/internal/middleware"
 	useCase "online-course/internal/profile/usecase"
 	utils "online-course/pkg/utils"

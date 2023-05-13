@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -10,6 +11,7 @@ import (
 	"online-course/pkg/utils"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type AdminHandler struct {
@@ -51,9 +53,13 @@ func (handler *AdminHandler) Create(ctx *gin.Context) {
 	_, err := handler.usecase.Create(input)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, utils.Response(http.StatusInternalServerError, "internal server error", err.Error()))
-		ctx.Abort()
-		return
+
+		if errors.Is(gorm.ErrDuplicatedKey, err) {
+			ctx.JSON(http.StatusInternalServerError, utils.Response(http.StatusInternalServerError, "internal server error", err.Error()))
+			ctx.Abort()
+			return
+		}
+
 	}
 
 	ctx.JSON(http.StatusCreated, utils.Response(http.StatusCreated, "created", "created"))
@@ -74,7 +80,7 @@ func (handler *AdminHandler) Update(ctx *gin.Context) {
 
 	input.UpdatedBy = user.ID
 
-	// update admin data
+	// Update data dengan memanggil repository update
 	data, err := handler.usecase.Update(id, input)
 
 	if err != nil {
@@ -87,7 +93,7 @@ func (handler *AdminHandler) Update(ctx *gin.Context) {
 }
 
 func (handler *AdminHandler) FindAll(ctx *gin.Context) {
-	// example: api/v1/admins?offset=1&limit=5
+	// api/v1/admins?offset=1&limit=5
 	offset, _ := strconv.Atoi(ctx.Query("offset"))
 	limit, _ := strconv.Atoi(ctx.Query("limit"))
 
@@ -102,7 +108,13 @@ func (handler *AdminHandler) FindById(ctx *gin.Context) {
 	data, err := handler.usecase.FindById(id)
 
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, utils.Response(http.StatusNotFound, "data not found", "data not found"))
+
+		if errors.Is(gorm.ErrRecordNotFound, err) {
+			ctx.JSON(http.StatusNotFound, utils.Response(http.StatusNotFound, "data not found", "data not found"))
+			ctx.Abort()
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, utils.Response(http.StatusInternalServerError, "internal server", "data not found"))
 		ctx.Abort()
 		return
 	}

@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
-	middleware "online-course/internal/middleware"
+	"online-course/internal/middleware"
 	dto "online-course/internal/product/dto"
 	usecase "online-course/internal/product/usecase"
-	utils "online-course/pkg/utils"
+	"online-course/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 )

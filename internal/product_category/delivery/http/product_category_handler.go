@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
-	middleware "online-course/internal/middleware"
+	"online-course/internal/middleware"
 	dto "online-course/internal/product_category/dto"
 	usecase "online-course/internal/product_category/usecase"
-	utils "online-course/pkg/utils"
+	"online-course/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,11 +23,9 @@ func NewProductCategoryHandler(usecase usecase.ProductCategoryUseCase) *ProductC
 func (handler *ProductCategoryHandler) Route(r *gin.RouterGroup) {
 	productCategoryRouter := r.Group("/api/v1")
 
-	// public routes
 	productCategoryRouter.GET("/product_categories", handler.FindAll)
 	productCategoryRouter.GET("/product_categories/:id", handler.FindById)
 
-	// admin routes
 	productCategoryRouter.Use(middleware.AuthJwt, middleware.AuthAdmin)
 	{
 		productCategoryRouter.POST("/product_categories", handler.Create)
@@ -75,7 +73,7 @@ func (handler *ProductCategoryHandler) Update(ctx *gin.Context) {
 
 	input.UpdatedBy = user.ID
 
-	// update
+	// Lakukan update
 	productCategory, err := handler.usecase.Update(id, input)
 
 	if err != nil {

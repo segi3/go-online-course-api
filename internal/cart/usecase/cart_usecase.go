@@ -13,10 +13,22 @@ type CartUseCase interface {
 	FindById(id int) (*entity.Cart, error)
 	Create(dto dto.CartRequestBody) (*entity.Cart, error)
 	Delete(id int, userId int) error
+	DeleteByUserId(userId int) error
 }
 
 type CartUseCaseImpl struct {
 	repository repository.CartRepository
+}
+
+// DeleteByUserId implements CartUseCase
+func (usecase *CartUseCaseImpl) DeleteByUserId(userId int) error {
+	err := usecase.repository.DeleteByUserId(userId)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Create implements CartUseCase
@@ -26,9 +38,7 @@ func (usecase *CartUseCaseImpl) Create(dto dto.CartRequestBody) (*entity.Cart, e
 		ProductID: dto.ProductID,
 	}
 
-	// @TODO: validate if product id already exists on cart
-
-	// @TODO: validate if product is active (not soft deleted)
+	// Perlu validasi untuk memeriksa apakah user pernah menginput data dengan product id yang sama
 
 	// Input data
 	data, err := usecase.repository.Create(cart)
@@ -50,7 +60,7 @@ func (usecase *CartUseCaseImpl) Delete(id int, userId int) error {
 	}
 
 	if cart.User.ID != int64(userId) {
-		return errors.New("cart does not belong to this user")
+		return errors.New("cart ini bukan milik anda")
 	}
 
 	err = usecase.repository.Delete(*cart)

@@ -15,7 +15,7 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeService(db *gorm.DB) *admin.AdminHandler {
+func InitializedService(db *gorm.DB) *admin.AdminHandler {
 	adminRepository := admin2.NewAdminRepository(db)
 	adminUseCase := admin3.NewAdminUseCase(adminRepository)
 	adminHandler := admin.NewAdminHandler(adminUseCase)

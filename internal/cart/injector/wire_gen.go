@@ -15,7 +15,7 @@ import (
 
 // Injectors from wire.go:
 
-func InitiliazeService(db *gorm.DB) *cart.CartHandler {
+func InitiliazedService(db *gorm.DB) *cart.CartHandler {
 	cartRepository := cart2.NewCartRepository(db)
 	cartUseCase := cart3.NewCartUseCase(cartRepository)
 	cartHandler := cart.NewCartHandler(cartUseCase)

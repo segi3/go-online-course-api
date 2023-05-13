@@ -9,17 +9,17 @@ package product
 import (
 	"gorm.io/gorm"
 	"online-course/internal/product/delivery/http"
-	"online-course/internal/product/repository"
-	product2 "online-course/internal/product/usecase"
-	"online-course/pkg/file/cloudinary"
+	product2 "online-course/internal/product/repository"
+	product3 "online-course/internal/product/usecase"
+	"online-course/pkg/fileupload/cloudinary"
 )
 
 // Injectors from wire.go:
 
-func InitiliazeService(db *gorm.DB) *product.ProductHandler {
-	productRepository := repository.NewProductRepository(db)
-	file := image.NewFile()
-	productUseCase := product2.NewProductUseCase(productRepository, file)
+func InitiliazedService(db *gorm.DB) *product.ProductHandler {
+	productRepository := product2.NewProductRepository(db)
+	fileUpload := fileupload.NewFileUpload()
+	productUseCase := product3.NewProductUseCase(productRepository, fileUpload)
 	productHandler := product.NewProductHandler(productUseCase)
 	return productHandler
 }

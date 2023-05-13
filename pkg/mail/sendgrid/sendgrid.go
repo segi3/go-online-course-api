@@ -4,66 +4,66 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
-	emailRegisterDto "online-course/internal/register/dto"
 	"os"
 	"path/filepath"
+
+	registerDto "online-course/internal/register/dto"
 
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 type Mail interface {
-	SendVerificationEmail(toEmail string, dto emailRegisterDto.CreateEmailVerification)
+	SendVerificationEmail(toEmail string, dto registerDto.CreateEmailVerification)
 }
 
 type MailImpl struct {
 }
 
-func (mi MailImpl) sendMail(toEmail string, result string, subject string) {
-	from := mail.NewEmail(os.Getenv("MAIL_SENDER"), os.Getenv("MAIL_SENDER"))
+func (mi *MailImpl) sendMail(toEmail string, result string, subject string) {
+	from := mail.NewEmail(os.Getenv("MAIL_SENDER_NAME"), os.Getenv("MAIL_SENDER_NAME"))
 	to := mail.NewEmail(toEmail, toEmail)
 
-	message := mail.NewSingleEmail(from, subject, to, "", result)
+	messages := mail.NewSingleEmail(from, subject, to, "", result)
 
-	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
+	client := sendgrid.NewSendClient(os.Getenv("MAIL_KEY"))
 
-	response, err := client.Send(message)
+	resp, err := client.Send(messages)
 
 	if err != nil {
 		fmt.Println(err)
-	} else if response.StatusCode != 200 {
-		fmt.Println(response)
+	} else if resp.StatusCode != 200 {
+		fmt.Println(resp)
 	} else {
-		fmt.Println("Email successfullt send")
+		fmt.Println("email berhasil dikirim ke %s", toEmail)
 	}
 }
 
 // SendVerificationEmail implements Mail
-func (mi *MailImpl) SendVerificationEmail(toEmail string, dto emailRegisterDto.CreateEmailVerification) {
+func (mi *MailImpl) SendVerificationEmail(toEmail string, dto registerDto.CreateEmailVerification) {
 	cwd, _ := os.Getwd()
 	templateFile := filepath.Join(cwd, "/templates/emails/verification_email.html")
 
-	result, err := Parsetemplate(templateFile, dto)
+	result, err := ParseTemplate(templateFile, dto)
 
 	if err != nil {
-		fmt.Println(err)
+		fmt.Print(err)
 	}
 
 	mi.sendMail(toEmail, result, dto.SUBJECT)
 }
 
-// parse html template
-func Parsetemplate(templateFileName string, data interface{}) (string, error) {
+func ParseTemplate(templateFileName string, data interface{}) (string, error) {
 	t, err := template.ParseFiles(templateFileName)
 
 	if err != nil {
-		return "nil", err
+		return "", err
 	}
 
 	buf := new(bytes.Buffer)
 
 	if err := t.Execute(buf, data); err != nil {
-		return "nil", err
+		return "", err
 	}
 
 	return buf.String(), nil

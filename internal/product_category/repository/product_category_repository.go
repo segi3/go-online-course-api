@@ -2,7 +2,7 @@ package product_category
 
 import (
 	entity "online-course/internal/product_category/entity"
-	utils "online-course/pkg/utils"
+	"online-course/pkg/utils"
 
 	"gorm.io/gorm"
 )

@@ -4,20 +4,26 @@ import (
 	dto "online-course/internal/product/dto"
 	entity "online-course/internal/product/entity"
 	repository "online-course/internal/product/repository"
-	cloudinaryUtils "online-course/pkg/file/cloudinary"
+	fileUpload "online-course/pkg/fileupload/cloudinary"
 )
 
 type ProductUseCase interface {
 	FindAll(offset int, limit int) []entity.Product
 	FindById(id int) (*entity.Product, error)
+	Count() int
 	Create(dto dto.ProductRequestBody) (*entity.Product, error)
 	Update(id int, dto dto.ProductRequestBody) (*entity.Product, error)
 	Delete(id int) error
 }
 
 type ProductUseCaseImpl struct {
-	repository      repository.ProductRepository
-	cloudinaryUtils cloudinaryUtils.File
+	repository repository.ProductRepository
+	fileUpload fileUpload.FileUpload
+}
+
+// Count implements ProductUseCase
+func (usecase *ProductUseCaseImpl) Count() int {
+	return usecase.repository.Count()
 }
 
 // Create implements ProductUseCase
@@ -32,7 +38,7 @@ func (usecase *ProductUseCaseImpl) Create(dto dto.ProductRequestBody) (*entity.P
 
 	// Upload image
 	if dto.Image != nil {
-		image, err := usecase.cloudinaryUtils.Upload(*dto.Image)
+		image, err := usecase.fileUpload.Upload(*dto.Image)
 
 		if err != nil {
 			return nil, err
@@ -45,7 +51,7 @@ func (usecase *ProductUseCaseImpl) Create(dto dto.ProductRequestBody) (*entity.P
 
 	// Upload video
 	if dto.Video != nil {
-		video, err := usecase.cloudinaryUtils.Upload(*dto.Video)
+		video, err := usecase.fileUpload.Upload(*dto.Video)
 
 		if err != nil {
 			return nil, err
@@ -96,7 +102,7 @@ func (usecase *ProductUseCaseImpl) FindById(id int) (*entity.Product, error) {
 
 // Update implements ProductUseCase
 func (usecase *ProductUseCaseImpl) Update(id int, dto dto.ProductRequestBody) (*entity.Product, error) {
-	// get product data by id
+	// cari data product berdasarkan id
 	product, err := usecase.repository.FindById(id)
 
 	if err != nil {
@@ -108,9 +114,9 @@ func (usecase *ProductUseCaseImpl) Update(id int, dto dto.ProductRequestBody) (*
 	product.Price = dto.Price
 	product.UpdatedByID = &dto.UpdatedBy
 
-	// if dto includes image then update image
+	// Jika terdapat update file image
 	if dto.Image != nil {
-		image, err := usecase.cloudinaryUtils.Upload(*dto.Image)
+		image, err := usecase.fileUpload.Upload(*dto.Image)
 
 		if err != nil {
 			return nil, err
@@ -118,7 +124,7 @@ func (usecase *ProductUseCaseImpl) Update(id int, dto dto.ProductRequestBody) (*
 
 		if product.Image != nil {
 			// Delete image
-			_, err := usecase.cloudinaryUtils.Delete(*product.Image)
+			_, err := usecase.fileUpload.Delete(*product.Image)
 
 			if err != nil {
 				return nil, err
@@ -128,17 +134,17 @@ func (usecase *ProductUseCaseImpl) Update(id int, dto dto.ProductRequestBody) (*
 		product.Image = image
 	}
 
-	// if dto includes video then update video
+	// Jika terdapat update file video
 	if dto.Video != nil {
-		video, err := usecase.cloudinaryUtils.Upload(*dto.Video)
+		video, err := usecase.fileUpload.Upload(*dto.Video)
 
 		if err != nil {
 			return nil, err
 		}
 
 		if product.Video != nil {
-			// Delete video
-			_, err := usecase.cloudinaryUtils.Delete(*product.Video)
+			// Delete image
+			_, err := usecase.fileUpload.Delete(*product.Video)
 
 			if err != nil {
 				return nil, err
@@ -155,8 +161,9 @@ func (usecase *ProductUseCaseImpl) Update(id int, dto dto.ProductRequestBody) (*
 	}
 
 	return updateProduct, nil
+
 }
 
-func NewProductUseCase(repository repository.ProductRepository, cloudinaryUtils cloudinaryUtils.File) ProductUseCase {
-	return &ProductUseCaseImpl{repository, cloudinaryUtils}
+func NewProductUseCase(repository repository.ProductRepository, fileUpload fileUpload.FileUpload) ProductUseCase {
+	return &ProductUseCaseImpl{repository, fileUpload}
 }

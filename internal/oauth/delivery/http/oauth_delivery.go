@@ -3,9 +3,10 @@ package oauth
 import (
 	"fmt"
 	"net/http"
+
 	dto "online-course/internal/oauth/dto"
 	usecase "online-course/internal/oauth/usecase"
-	utils "online-course/pkg/utils"
+	"online-course/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 )

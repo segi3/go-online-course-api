@@ -1,8 +1,8 @@
-package repository
+package product
 
 import (
 	entity "online-course/internal/product/entity"
-	utils "online-course/pkg/utils"
+	"online-course/pkg/utils"
 
 	"gorm.io/gorm"
 )
@@ -10,6 +10,7 @@ import (
 type ProductRepository interface {
 	FindAll(offset int, limit int) []entity.Product
 	FindById(id int) (*entity.Product, error)
+	Count() int
 	Create(entity entity.Product) (*entity.Product, error)
 	Update(entity entity.Product) (*entity.Product, error)
 	Delete(entity entity.Product) error
@@ -17,6 +18,17 @@ type ProductRepository interface {
 
 type ProductRepositoryImpl struct {
 	db *gorm.DB
+}
+
+// Count implements ProductRepository
+func (repository *ProductRepositoryImpl) Count() int {
+	var product entity.Product
+
+	var totalProduct int64
+
+	repository.db.Model(&product).Count(&totalProduct)
+
+	return int(totalProduct)
 }
 
 // Create implements ProductRepository

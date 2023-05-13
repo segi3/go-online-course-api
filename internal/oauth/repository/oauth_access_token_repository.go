@@ -2,6 +2,7 @@ package oauth
 
 import (
 	"fmt"
+
 	entity "online-course/internal/oauth/entity"
 
 	"gorm.io/gorm"

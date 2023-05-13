@@ -1,0 +1,1 @@
+ALTER TABLE `discounts` ADD `value` INT NOT NULL AFTER `type`;

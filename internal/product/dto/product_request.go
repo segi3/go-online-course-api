@@ -2,7 +2,6 @@ package product
 
 import "mime/multipart"
 
-// request is form-data
 type ProductRequestBody struct {
 	ProductCategoryID int64                 `form:"product_category_id" binding:"required"`
 	Title             string                `form:"title" binding:"required"`

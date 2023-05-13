@@ -11,6 +11,7 @@ type AdminRepository interface {
 	FindAll(offset int, limit int) []entity.Admin
 	FindById(id int) (*entity.Admin, error)
 	FindByEmail(email string) (*entity.Admin, error)
+	Count() int
 	Create(entity entity.Admin) (*entity.Admin, error)
 	Update(entity entity.Admin) (*entity.Admin, error)
 	Delete(entity entity.Admin) error
@@ -18,6 +19,17 @@ type AdminRepository interface {
 
 type AdminRepositoryImpl struct {
 	db *gorm.DB
+}
+
+// Count implements AdminRepository
+func (repository *AdminRepositoryImpl) Count() int {
+	var admin entity.Admin
+
+	var totalAdmin int64
+
+	repository.db.Model(&admin).Count(&totalAdmin)
+
+	return int(totalAdmin)
 }
 
 // Create implements AdminRepository

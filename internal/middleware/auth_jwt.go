@@ -2,18 +2,18 @@ package middleware
 
 import (
 	"net/http"
-	utils "online-course/pkg/utils"
 	"os"
 	"strings"
 
+	dto "online-course/internal/oauth/dto"
+	"online-course/pkg/utils"
+
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-
-	dto "online-course/internal/oauth/dto"
 )
 
 type Header struct {
-	Authorization string `header: "authorization" binding:"required"`
+	Authorization string `header:"authorization" binding:"required"`
 }
 
 func AuthJwt(ctx *gin.Context) {
@@ -57,5 +57,4 @@ func AuthJwt(ctx *gin.Context) {
 
 	ctx.Set("user", claims)
 	ctx.Next()
-
 }

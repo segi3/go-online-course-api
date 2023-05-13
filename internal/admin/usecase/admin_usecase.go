@@ -12,6 +12,7 @@ type AdminUseCase interface {
 	FindAll(offset int, limit int) []entity.Admin
 	FindById(id int) (*entity.Admin, error)
 	FindByEmail(email string) (*entity.Admin, error)
+	Count() int
 	Create(dto dto.AdminRequestBody) (*entity.Admin, error)
 	Update(id int, dto dto.AdminRequestBody) (*entity.Admin, error)
 	Delete(id int) error
@@ -19,6 +20,11 @@ type AdminUseCase interface {
 
 type AdminUseCaseImpl struct {
 	repository repository.AdminRepository
+}
+
+// Count implements AdminUseCase
+func (usecase *AdminUseCaseImpl) Count() int {
+	return usecase.repository.Count()
 }
 
 // Create implements AdminUseCase
@@ -48,7 +54,7 @@ func (usecase *AdminUseCaseImpl) Create(dto dto.AdminRequestBody) (*entity.Admin
 
 // Delete implements AdminUseCase
 func (usecase *AdminUseCaseImpl) Delete(id int) error {
-	// get admin data by id
+	// Search dari table admin berdasarkan id
 	admin, err := usecase.repository.FindById(id)
 
 	if err != nil {
@@ -79,12 +85,12 @@ func (usecase *AdminUseCaseImpl) FindById(id int) (*entity.Admin, error) {
 
 // Update implements AdminUseCase
 func (usecase *AdminUseCaseImpl) Update(id int, dto dto.AdminRequestBody) (*entity.Admin, error) {
-	// get admin data by id
+	// Search dari table admin berdasarkan id
 	admin, err := usecase.repository.FindById(id)
 
 	admin.Name = dto.Name
 
-	// validate admin email, only update if it changes
+	// Validasi admin email jika tidak sama maka akan di update
 	if admin.Email != dto.Email {
 		admin.Email = dto.Email
 	}
@@ -105,7 +111,7 @@ func (usecase *AdminUseCaseImpl) Update(id int, dto dto.AdminRequestBody) (*enti
 
 	admin.UpdatedByID = &dto.UpdatedBy
 
-	// update admin data
+	// Kita akan melakukan update dengan memanggil repository
 	updateAdmin, err := usecase.repository.Update(*admin)
 
 	if err != nil {

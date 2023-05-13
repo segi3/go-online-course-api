@@ -13,7 +13,7 @@ func DB() *gorm.DB {
 	err := godotenv.Load()
 
 	if err != nil {
-		panic("Error could not load env")
+		panic("Error tidak dapat melakukan load .env")
 	}
 
 	host := os.Getenv("MYSQL_HOST")
@@ -27,10 +27,10 @@ func DB() *gorm.DB {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		panic("Could not connect to mysql database")
+		panic("Tidak dapat terkoneksi dengan database")
 	}
 
-	fmt.Println("connected to mysql database")
+	fmt.Println("berhasil terkoneksi dengan database")
 
 	return db
 }

@@ -1,1 +1,0 @@
-drop table oauth_refresh_tokens

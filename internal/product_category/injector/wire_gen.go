@@ -15,7 +15,7 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeService(db *gorm.DB) *product_category.ProductCategoryHandler {
+func InitializedService(db *gorm.DB) *product_category.ProductCategoryHandler {
 	productCategoryRepository := product_category2.NewProductCategoryRepository(db)
 	productCategoryUseCase := product_category3.NewProductCategoryUseCase(productCategoryRepository)
 	productCategoryHandler := product_category.NewProductCategoryHandler(productCategoryUseCase)

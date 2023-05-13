@@ -19,7 +19,7 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeService(db *gorm.DB) *oauth.OauthHandler {
+func InitializedService(db *gorm.DB) *oauth.OauthHandler {
 	oauthClientRepository := oauth2.NewOauthClientRepository(db)
 	oauthAccessTokenRepository := oauth2.NewOauthAccessTokenRepository(db)
 	oauthRefreshTokenRepository := oauth2.NewOauthRefreshTokenRepository(db)

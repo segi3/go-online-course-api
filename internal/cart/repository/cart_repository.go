@@ -12,17 +12,29 @@ type CartRepository interface {
 	FindById(id int) (*entity.Cart, error)
 	Create(entity entity.Cart) (*entity.Cart, error)
 	Delete(entity entity.Cart) error
+	DeleteByUserId(userId int) error
 }
 
 type CartRepositoryImpl struct {
 	db *gorm.DB
 }
 
+// DeleteByUserId implements CartRepository
+func (repository *CartRepositoryImpl) DeleteByUserId(userId int) error {
+	var cart entity.Cart
+
+	if err := repository.db.Where("user_id = ?", userId).Delete(&cart).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // FindByUserId implements CartRepository
 func (repository *CartRepositoryImpl) FindByUserId(userId int, offset int, limit int) []entity.Cart {
 	var carts []entity.Cart
 
-	repository.db.Scopes(utils.Paginate(offset, limit)).Preload("User").Preload("Product").Where("user_id = ?", userId).Find(&carts)
+	repository.db.Scopes(utils.Paginate(offset, limit)).Preload("User").Preload("Product.ProductCategory").Where("user_id = ?", userId).Find(&carts)
 
 	return carts
 }

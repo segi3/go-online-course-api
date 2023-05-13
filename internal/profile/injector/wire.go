@@ -4,13 +4,12 @@
 package profile
 
 import (
+	"github.com/google/wire"
+	"gorm.io/gorm"
 	handler "online-course/internal/profile/delivery/http"
 	useCase "online-course/internal/profile/usecase"
 	userRepository "online-course/internal/user/repository"
 	userUseCase "online-course/internal/user/usecase"
-
-	"github.com/google/wire"
-	"gorm.io/gorm"
 )
 
 func InitializedService(db *gorm.DB) *handler.ProfileHandler {

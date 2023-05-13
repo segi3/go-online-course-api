@@ -5,38 +5,41 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	registerHandler "online-course/internal/register/delivery/http"
-	registerUseCase "online-course/internal/register/usecase"
-	userRepository "online-course/internal/user/repository"
-	useUseCase "online-course/internal/user/usecase"
-	mail "online-course/pkg/mail/sendgrid"
-
 	admin "online-course/internal/admin/injector"
 	cart "online-course/internal/cart/injector"
+	classRoom "online-course/internal/class_room/injector"
+	dashboard "online-course/internal/dashboard/injector"
+	discount "online-course/internal/discount/injector"
 	oauth "online-course/internal/oauth/injector"
+	order "online-course/internal/order/injector"
 	product "online-course/internal/product/injector"
 	productCategory "online-course/internal/product_category/injector"
 	profile "online-course/internal/profile/injector"
+	register "online-course/internal/register/injector"
+	user "online-course/internal/user/injector"
+	webhook "online-course/internal/webhook/injector"
 )
 
 func main() {
 
+	// gin.SetMode(gin.ReleaseMode)
 	db := mysql.DB()
 
 	r := gin.Default()
 
-	mail := mail.NewMail()
-	userRepository := userRepository.NewUserRepository(db)
-	userUseCase := useUseCase.NewUserUseCase(userRepository)
-	registerUseCase := registerUseCase.NewRegisterUseCase(userUseCase, mail)
-	registerHandler.NewRegisterHandler(registerUseCase).Route(&r.RouterGroup)
-
-	oauth.InitializeService(db).Route(&r.RouterGroup)
-	profile.InitializeService(db).Route(&r.RouterGroup)
-	admin.InitializeService(db).Route(&r.RouterGroup)
-	productCategory.InitializeService(db).Route(&r.RouterGroup)
-	product.InitiliazeService(db).Route(&r.RouterGroup)
-	cart.InitiliazeService(db).Route(&r.RouterGroup)
+	register.InitializedService(db).Route(&r.RouterGroup)
+	oauth.InitializedService(db).Route(&r.RouterGroup)
+	profile.InitializedService(db).Route(&r.RouterGroup)
+	admin.InitializedService(db).Route(&r.RouterGroup)
+	productCategory.InitializedService(db).Route(&r.RouterGroup)
+	product.InitiliazedService(db).Route(&r.RouterGroup)
+	cart.InitiliazedService(db).Route(&r.RouterGroup)
+	discount.InitializedService(db).Route(&r.RouterGroup)
+	order.InitializedService(db).Route(&r.RouterGroup)
+	webhook.InitializedService(db).Route(&r.RouterGroup)
+	classRoom.InitializedService(db).Route(&r.RouterGroup)
+	dashboard.InitializedService(db).Route(&r.RouterGroup)
+	user.InitializedService(db).Route(&r.RouterGroup)
 
 	r.Run()
 }

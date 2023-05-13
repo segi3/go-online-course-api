@@ -2,6 +2,7 @@ package product
 
 import (
 	"database/sql"
+
 	adminEntity "online-course/internal/admin/entity"
 	entity "online-course/internal/product/entity"
 	productCategoryEntity "online-course/internal/product_category/entity"
@@ -43,13 +44,13 @@ func CreateProductResponse(product entity.Product) ProductResponseBody {
 type ProductListResponse []ProductResponseBody
 
 func CreateProductListResponse(products []entity.Product) ProductListResponse {
-	productResponse := ProductListResponse{}
+	productResp := ProductListResponse{}
 
 	for _, p := range products {
 
 		product := CreateProductResponse(p)
-		productResponse = append(productResponse, product)
+		productResp = append(productResp, product)
 	}
 
-	return productResponse
+	return productResp
 }

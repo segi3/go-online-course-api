@@ -11,6 +11,7 @@ type ApiResponse struct {
 }
 
 func Response(code int, message string, data interface{}) ApiResponse {
+
 	response := ApiResponse{
 		Meta: Meta{
 			Code:    code,

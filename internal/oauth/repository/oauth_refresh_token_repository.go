@@ -8,7 +8,7 @@ import (
 
 type OauthRefreshTokenRepository interface {
 	Create(oauthRefreshToken entity.OauthRefreshToken) (*entity.OauthRefreshToken, error)
-	FindOneByRefreshToken(refreshToken string) (*entity.OauthRefreshToken, error)
+	FindOneByToken(token string) (*entity.OauthRefreshToken, error)
 	Delete(id int) error
 }
 
@@ -36,11 +36,11 @@ func (repository *OauthRefreshTokenRepositoryImpl) Delete(id int) error {
 	return nil
 }
 
-// FindOneByRefreshToken implements OauthRefreshTokenRepository
-func (repository *OauthRefreshTokenRepositoryImpl) FindOneByRefreshToken(refreshToken string) (*entity.OauthRefreshToken, error) {
+// FindOneByToken implements OauthRefreshTokenRepository
+func (repository *OauthRefreshTokenRepositoryImpl) FindOneByToken(token string) (*entity.OauthRefreshToken, error) {
 	var oauthRefreshToken entity.OauthRefreshToken
 
-	if err := repository.db.Where("token = ?", refreshToken).First(&oauthRefreshToken).Error; err != nil {
+	if err := repository.db.Where("token = ?", token).First(&oauthRefreshToken).Error; err != nil {
 		return nil, err
 	}
 

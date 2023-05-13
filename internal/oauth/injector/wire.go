@@ -1,8 +1,11 @@
-// go:build wireinject
+//go:build wireinject
+// +build wireinject
 
 package oauth
 
 import (
+	"github.com/google/wire"
+	"gorm.io/gorm"
 	adminRepository "online-course/internal/admin/repository"
 	adminUseCase "online-course/internal/admin/usecase"
 	oauthHandler "online-course/internal/oauth/delivery/http"
@@ -10,9 +13,6 @@ import (
 	oauthUseCase "online-course/internal/oauth/usecase"
 	userRepository "online-course/internal/user/repository"
 	userUseCase "online-course/internal/user/usecase"
-
-	"github.com/google/wire"
-	"gorm.io/gorm"
 )
 
 func InitializedService(db *gorm.DB) *oauthHandler.OauthHandler {
@@ -31,5 +31,3 @@ func InitializedService(db *gorm.DB) *oauthHandler.OauthHandler {
 	return &oauthHandler.OauthHandler{}
 
 }
-
-// wire gen internal/oauth/injector/wire.go

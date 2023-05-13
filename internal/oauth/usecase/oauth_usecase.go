@@ -41,7 +41,7 @@ func (usecase *OauthUseCaseImpl) Login(loginRequestBody dto.LoginRequestBody) (*
 
 	var user dto.UserResponse
 
-	// admin login
+	// Login menggunakan admin
 	if oauthClient.Name == "web-admin" {
 		dataAdmin, err := usecase.adminUseCase.FindByEmail(loginRequestBody.Email)
 
@@ -54,7 +54,7 @@ func (usecase *OauthUseCaseImpl) Login(loginRequestBody dto.LoginRequestBody) (*
 		user.Password = dataAdmin.Password
 
 	} else {
-		// user login
+		// Login menggunakan user
 		dataUser, err := usecase.userUseCase.FindByEmail(loginRequestBody.Email)
 
 		if err != nil {
@@ -69,7 +69,7 @@ func (usecase *OauthUseCaseImpl) Login(loginRequestBody dto.LoginRequestBody) (*
 
 	jwtKey := []byte(os.Getenv("JWT_SECRET"))
 
-	// Compare password
+	// Compare password apakah sama atau tidak
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginRequestBody.Password))
 
 	if err != nil {
@@ -99,7 +99,7 @@ func (usecase *OauthUseCaseImpl) Login(loginRequestBody dto.LoginRequestBody) (*
 		return nil, err
 	}
 
-	// insert access token to db
+	// Insert data ke table oauth access token
 	dataOauthAccessToken := entity.OauthAccessToken{
 		OauthClientID: &oauthClient.ID,
 		UserID:        user.ID,
@@ -116,11 +116,11 @@ func (usecase *OauthUseCaseImpl) Login(loginRequestBody dto.LoginRequestBody) (*
 		return nil, err
 	}
 
-	// insert refresh token to db
+	// Insert data ke table oauth refresh token
 	dataOauthRefreshToken := entity.OauthRefreshToken{
 		OauthAccessTokenID: &oauthAccessToken.ID,
 		UserID:             user.ID,
-		Token:              utils.RandomString(128),
+		Token:              utils.RandString(128),
 		ExpiredAt: sql.NullTime{
 			Time: time.Now().Add(24 * 366 * time.Hour),
 		},
@@ -160,4 +160,5 @@ func NewOauthUseCase(
 		userUseCase,
 		adminUseCase,
 	}
+
 }

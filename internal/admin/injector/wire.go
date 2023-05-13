@@ -1,12 +1,14 @@
+//go:build wireinject
+// +build wireinject
+
 package admin
 
 import (
+	"github.com/google/wire"
+	"gorm.io/gorm"
 	handler "online-course/internal/admin/delivery/http"
 	repository "online-course/internal/admin/repository"
 	usecase "online-course/internal/admin/usecase"
-
-	"github.com/google/wire"
-	"gorm.io/gorm"
 )
 
 func InitializedService(db *gorm.DB) *handler.AdminHandler {
